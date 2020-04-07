@@ -98,6 +98,15 @@ JSON_DOCUMENT Docker::list_images(){
     return requestAndParseJson(GET,path);
 }
 
+/**
+ * Create a new image using either import or pull (see official docker API for full documentation:
+ *  https://docs.docker.com/engine/api/v1.24/#32-images )
+ * @param from_image The image from which the new image will be created (eg "hello-world:latest")
+ * @param from_src The site from which an image should be imported ("-" for supplying in content body not currently supported)
+ * @param repo The repository from which it will be imported
+ * @param tag The tag that will be used (blank will pull ALL tags unless specified in the from_image parameter)
+ * @return The JSON document describing the outcome of the image create request
+ */
 JSON_DOCUMENT Docker::create_image(const std::string& from_image, const std::string& from_src, const std::string& repo, const std::string& tag){
     std::string path = "/images/create?";
     path += param("fromImage", from_image);
