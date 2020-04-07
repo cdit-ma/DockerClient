@@ -22,7 +22,7 @@ std::string param( const std::string& param_name, bool param_value);
 std::string param( const std::string& param_name, int param_value);
 std::string param( const std::string& param_name, JSON_DOCUMENT& param_value);
 
-std::string jsonToString(JSON_VALUE & doc);
+std::string jsonToString(const JSON_VALUE& doc);
 
 class Docker{
     public :
@@ -40,6 +40,7 @@ class Docker{
         * Images
         */
         JSON_DOCUMENT list_images();
+        JSON_DOCUMENT create_image(const std::string& from_image, const std::string& from_src="", const std::string& repo="", const std::string& tag="");
 
         /*
         * Containers
