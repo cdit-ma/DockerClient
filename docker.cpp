@@ -98,6 +98,24 @@ JSON_DOCUMENT Docker::list_images(){
     return requestAndParseJson(GET,path);
 }
 
+/**
+ * Create a new image using either import or pull (see official docker API for full documentation:
+ *  https://docs.docker.com/engine/api/v1.24/#32-images )
+ * @param from_image The image from which the new image will be created (eg "hello-world:latest")
+ * @param from_src The site from which an image should be imported ("-" for supplying in content body not currently supported)
+ * @param repo The repository from which it will be imported
+ * @param tag The tag that will be used (blank will pull ALL tags unless specified in the from_image parameter)
+ * @return The JSON document describing the outcome of the image create request
+ */
+JSON_DOCUMENT Docker::create_image(const std::string& from_image, const std::string& from_src, const std::string& repo, const std::string& tag){
+    std::string path = "/images/create?";
+    path += param("fromImage", from_image);
+    path += param("fromSrc", from_src);
+    path += param("repo", repo);
+    path += param("tag", tag);
+    return requestAndParseJson(POST,path);
+}
+
 /*
 * Containers
 */
@@ -231,8 +249,6 @@ JSON_DOCUMENT Docker::requestAndParse(Method method, const std::string& path, lo
         headers = curl_slist_append(headers, "Accept: application/json");
     headers = curl_slist_append(headers, "Content-Type: application/json");
 
-    //std::cout << "HOST_PATH : " << (host_uri + path) << std::endl;
-
     if(!is_remote)
         curl_easy_setopt(curl, CURLOPT_UNIX_SOCKET_PATH, "/var/run/docker.sock");
     curl_easy_setopt(curl, CURLOPT_URL, (host_uri + path).c_str());
@@ -267,8 +283,8 @@ JSON_DOCUMENT Docker::requestAndParse(Method method, const std::string& path, lo
         resp.Parse(buf);
 
         doc.AddMember("success", false, doc.GetAllocator());
-        // Forced bool parameter required to prevent ambiguous function call (long appears to cause problems)
-        doc.AddMember("code", (bool)status, doc.GetAllocator());
+        // Forced int parameter required to prevent ambiguous function call (long appears to cause problems)
+        doc.AddMember("code", (int)status, doc.GetAllocator());
         doc.AddMember("data", resp, doc.GetAllocator());
     }
     return doc;
@@ -352,7 +368,7 @@ std::string param( const std::string& param_name, JSON_DOCUMENT& param_value){
     }
 }
 
-std::string jsonToString(JSON_VALUE & doc){
+std::string jsonToString(const JSON_VALUE & doc){
     rapidjson::StringBuffer buffer;
     buffer.Clear();
     rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
