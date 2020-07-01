@@ -5,6 +5,8 @@ project(DockerClient)
 # Add rapidJSON dependency
 set(RAPIDJSON_BUILD_TESTS OFF CACHE BOOL "")
 set(RAPIDJSON_BUILD_EXAMPLES OFF CACHE BOOL "")
+set(RAPIDJSON_BUILD_DOC OFF CACHE BOOL "")
+
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/rapidjson)
 find_package(RapidJSON)
 
