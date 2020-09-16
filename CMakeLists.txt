@@ -10,6 +10,10 @@ set(RAPIDJSON_BUILD_DOC OFF CACHE BOOL "")
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/rapidjson)
 find_package(RapidJSON)
 
+if(WIN32)
+    set(CURL_LIBRARY "-lcurl")
+endif(WIN32)
+
 find_package(CURL)
 
 add_library(docker-cpp STATIC "")
