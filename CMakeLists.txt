@@ -10,7 +10,7 @@ set(RAPIDJSON_BUILD_DOC OFF CACHE BOOL "")
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/rapidjson)
 find_package(RapidJSON)
 
-find_package(CURL CONFIG REQUIRED)
+find_package(CURL REQUIRED)
 
 add_library(docker-cpp STATIC "")
 
@@ -20,7 +20,7 @@ target_include_directories(docker-cpp
         PUBLIC ${RapidJSON_INCLUDE_DIR}
         )
 
-target_link_libraries(docker-cpp PUBLIC CURL::libcurl)
+target_link_libraries(docker-cpp PUBLIC ${CURL_LIBRARIES})
 
 target_sources(docker-cpp PRIVATE
         "${CMAKE_CURRENT_SOURCE_DIR}/docker.cpp"
