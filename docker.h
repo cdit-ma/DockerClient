@@ -12,7 +12,7 @@
 typedef enum{
     GET,
     POST,
-    DELETE,
+    Delete,
     PUT
 } Method;
 

@@ -180,7 +180,7 @@ JSON_DOCUMENT Docker::delete_container(const std::string& container_id, bool v, 
     std::string path = "/containers/" + container_id + "?";
     path += param("v", v);
     path += param("force", force);
-    return requestAndParse(DELETE,path,204);
+    return requestAndParse(Delete,path,204);
 }
 JSON_DOCUMENT Docker::unpause_container(const std::string& container_id){
     std::string path = "/containers/" + container_id + "/unpause?";
@@ -223,7 +223,7 @@ JSON_DOCUMENT Docker::requestAndParse(Method method, const std::string& path, un
         case POST:
             method_str = "POST";
             break;
-        case DELETE:
+        case Delete:
             method_str = "DELETE";
             break;
         case PUT:
